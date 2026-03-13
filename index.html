@@ -3,201 +3,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TaylorTech Web Systems | Calculadora Marketplace</title>
-  <meta name="description" content="Calculadora de preço de venda para Shopee e Mercado Livre com margem, taxas, custos extras e frete grátis." />
+  <meta name="description" content="TaylorTech Marketplace SaaS - simulador de preço para Shopee e Mercado Livre" />
+  <title>TaylorTech Marketplace SaaS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="page-shell">
-    <header class="hero">
-      <div class="brand-row">
-        <img src="assets/logo-taylortech.svg" alt="Logo TaylorTech Web Systems" class="brand-logo" />
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/logo-taylortech.png" alt="TaylorTech Web Systems" class="brand__logo" />
         <div>
-          <p class="eyebrow">TaylorTech Web Systems</p>
-          <h1>Calculadora de Preço para Shopee e Mercado Livre</h1>
-          <p class="hero-text">
-            Simule o custo da peça, some frete grátis, custos extras e taxas do marketplace.
-            No final, veja o preço ideal de venda, valor líquido e lucro estimado.
-          </p>
+          <p class="brand__tag">Marketplace SaaS</p>
+          <h1>TaylorTech</h1>
         </div>
       </div>
-      <div class="formula-box">
-        <span>Fórmula principal</span>
-        <strong>Preço = Custo ÷ (1 − taxa − margem)</strong>
+
+      <nav class="nav">
+        <button class="nav__item nav__item--active" data-target="dashboard">Dashboard</button>
+        <button class="nav__item" data-target="calculator">Calculadora</button>
+        <button class="nav__item" data-target="products">Produtos</button>
+        <button class="nav__item" data-target="guide">Estratégia</button>
+      </nav>
+
+      <div class="sidebar__footer">
+        <p>Sistema leve para GitHub Pages</p>
+        <span>v1.0 TaylorTech Web Systems</span>
       </div>
-    </header>
+    </aside>
 
-    <main class="main-grid">
-      <section class="panel controls-panel">
-        <div class="panel-header">
-          <h2>Simulação</h2>
-          <p>Preencha os campos para calcular o preço ideal.</p>
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Painel inteligente</p>
+          <h2>Precificação para Shopee e Mercado Livre</h2>
+          <p class="topbar__subtitle">Cadastre peças, simule lucro e compare a melhor plataforma em segundos.</p>
+        </div>
+        <div class="topbar__actions">
+          <button id="exportJsonBtn" class="btn btn--ghost">Exportar JSON</button>
+          <button id="clearHistoryBtn" class="btn btn--danger">Limpar histórico</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="panel-group active">
+        <div class="stats-grid">
+          <article class="stat-card glow-green">
+            <span class="stat-card__label">Lucro estimado atual</span>
+            <strong id="statCurrentProfit">R$ 0,00</strong>
+            <small>com base na melhor plataforma</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card__label">Produtos salvos</span>
+            <strong id="statProductsCount">0</strong>
+            <small>armazenados no navegador</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-card__label">Melhor plataforma</span>
+            <strong id="statBestPlatform">-</strong>
+            <small>comparação em tempo real</small>
+          </article>
+          <article class="stat-card glow-soft">
+            <span class="stat-card__label">Margem desejada</span>
+            <strong id="statMargin">40%</strong>
+            <small>ajuste na calculadora</small>
+          </article>
         </div>
 
-        <div class="form-grid">
-          <label class="field">
-            <span>Nome da peça</span>
-            <input type="text" id="productName" placeholder="Ex.: Câmara de ar aro 29" />
-          </label>
-
-          <label class="field">
-            <span>Valor de compra da peça</span>
-            <input type="number" id="cost" step="0.01" placeholder="0,00" />
-          </label>
-
-          <label class="field">
-            <span>Custos extras</span>
-            <input type="number" id="extraCost" step="0.01" placeholder="Embalagem, deslocamento, etiqueta..." />
-          </label>
-
-          <label class="field">
-            <span>Margem de lucro desejada (%)</span>
-            <input type="number" id="margin" step="0.01" value="40" />
-          </label>
-
-          <label class="field">
-            <span>Taxa da Shopee (%)</span>
-            <input type="number" id="shopeeFee" step="0.01" value="20" />
-          </label>
-
-          <label class="field">
-            <span>Taxa do Mercado Livre (%)</span>
-            <input type="number" id="mlFee" step="0.01" value="13" />
-          </label>
-
-          <div class="switch-card">
-            <div>
-              <h3>Frete grátis embutido</h3>
-              <p>Ative para somar o frete ao custo total.</p>
+        <div class="dashboard-grid">
+          <article class="card chart-card">
+            <div class="card__header">
+              <div>
+                <h3>Gráfico de lucro recente</h3>
+                <p>Últimos produtos comparados entre Shopee e Mercado Livre.</p>
+              </div>
             </div>
-            <button class="toggle active" id="shippingToggle" type="button" aria-pressed="true">
-              <span class="toggle-knob"></span>
-            </button>
-          </div>
-
-          <label class="field" id="shippingField">
-            <span>Custo estimado do frete</span>
-            <input type="number" id="shippingCost" step="0.01" placeholder="0,00" />
-          </label>
-
-          <div class="switch-card">
-            <div>
-              <h3>Preço psicológico</h3>
-              <p>Ex.: 47,90 em vez de 48,37.</p>
+            <div class="chart-legend">
+              <span><i class="legend legend--green"></i> Shopee</span>
+              <span><i class="legend legend--yellow"></i> Mercado Livre</span>
             </div>
-            <button class="toggle active" id="psychologicalToggle" type="button" aria-pressed="true">
-              <span class="toggle-knob"></span>
-            </button>
-          </div>
-        </div>
+            <div id="barChart" class="bars"></div>
+          </article>
 
-        <div class="preset-row">
-          <button class="preset-btn" data-margin="40" data-shopee="20" data-ml="13">Equilibrado</button>
-          <button class="preset-btn" data-margin="50" data-shopee="20" data-ml="18">Agressivo</button>
-          <button class="preset-btn" id="clearBtn">Limpar</button>
+          <article class="card products-preview">
+            <div class="card__header">
+              <div>
+                <h3>Últimos produtos</h3>
+                <p>Resumo rápido dos cadastros recentes.</p>
+              </div>
+            </div>
+            <div id="recentProducts" class="list"></div>
+          </article>
         </div>
       </section>
 
-      <section class="results-column">
-        <div class="summary-grid">
-          <article class="mini-card">
-            <span>Custo total considerado</span>
-            <strong id="totalCost">R$ 0,00</strong>
-          </article>
-          <article class="mini-card">
-            <span>Margem alvo</span>
-            <strong id="marginTarget">40%</strong>
-          </article>
-          <article class="mini-card">
-            <span>Frete embutido</span>
-            <strong id="shippingStatus">Sim</strong>
-          </article>
-        </div>
-
-        <div class="platform-grid">
-          <article class="result-card shopee-card">
-            <div class="result-head">
+      <section id="calculator" class="panel-group">
+        <div class="calculator-grid">
+          <article class="card form-card">
+            <div class="card__header">
               <div>
-                <p class="platform-name">Shopee</p>
-                <h3 id="shopeeProductTitle">Preço ideal de venda</h3>
-              </div>
-              <span class="fee-badge" id="shopeeBadge">Taxa 20%</span>
-            </div>
-            <p class="big-price" id="shopeePrice">R$ 0,00</p>
-            <div class="result-stats">
-              <div class="stat-box">
-                <span>Valor líquido</span>
-                <strong id="shopeeNet">R$ 0,00</strong>
-              </div>
-              <div class="stat-box">
-                <span>Lucro estimado</span>
-                <strong id="shopeeProfit">R$ 0,00</strong>
+                <h3>Simulação de preço</h3>
+                <p>Preencha os custos e o sistema calcula o preço ideal.</p>
               </div>
             </div>
-            <div class="footer-stat">
-              <span>Margem real no anúncio</span>
-              <strong id="shopeeRealMargin">0%</strong>
-            </div>
+
+            <form id="pricingForm" class="form-grid">
+              <label class="field field--full">
+                <span>Nome da peça</span>
+                <input type="text" id="productName" placeholder="Ex.: Corrente Bike 7v" />
+              </label>
+
+              <label class="field">
+                <span>Valor de compra</span>
+                <input type="number" step="0.01" min="0" id="cost" value="0" />
+              </label>
+
+              <label class="field">
+                <span>Custos extras</span>
+                <input type="number" step="0.01" min="0" id="extraCost" value="0" />
+              </label>
+
+              <label class="field">
+                <span>Frete embutido</span>
+                <input type="number" step="0.01" min="0" id="shippingCost" value="0" />
+              </label>
+
+              <label class="field">
+                <span>Margem desejada (%)</span>
+                <input type="number" step="1" min="0" id="desiredMargin" value="40" />
+              </label>
+
+              <label class="field">
+                <span>Taxa Shopee (%)</span>
+                <input type="number" step="1" min="0" id="shopeeFee" value="20" />
+              </label>
+
+              <label class="field">
+                <span>Taxa Mercado Livre (%)</span>
+                <input type="number" step="1" min="0" id="mlFee" value="13" />
+              </label>
+
+              <label class="field toggle-field">
+                <span>Preço psicológico</span>
+                <button type="button" id="psychologicalToggle" class="toggle toggle--on" aria-pressed="true">
+                  <span class="toggle__dot"></span>
+                </button>
+              </label>
+
+              <div class="actions field--full">
+                <button type="submit" class="btn btn--primary">Salvar produto</button>
+                <button type="button" id="simulateBtn" class="btn btn--ghost">Simular agora</button>
+                <button type="button" id="resetBtn" class="btn btn--ghost">Limpar</button>
+              </div>
+            </form>
           </article>
 
-          <article class="result-card ml-card">
-            <div class="result-head">
-              <div>
-                <p class="platform-name">Mercado Livre</p>
-                <h3 id="mlProductTitle">Preço ideal de venda</h3>
+          <div class="results-grid">
+            <article class="card result-card result-card--green">
+              <div class="card__header">
+                <div>
+                  <h3>Shopee</h3>
+                  <p>Preço sugerido e lucro líquido</p>
+                </div>
               </div>
-              <span class="fee-badge ml-badge" id="mlBadge">Taxa 13%</span>
-            </div>
-            <p class="big-price blue-price" id="mlPrice">R$ 0,00</p>
-            <div class="result-stats">
-              <div class="stat-box">
-                <span>Valor líquido</span>
-                <strong id="mlNet">R$ 0,00</strong>
+              <strong id="shopeePrice">R$ 0,00</strong>
+              <div class="result-meta">
+                <span>Líquido: <b id="shopeeNet">R$ 0,00</b></span>
+                <span>Lucro: <b id="shopeeProfit">R$ 0,00</b></span>
+                <span>Margem real: <b id="shopeeRealMargin">0%</b></span>
               </div>
-              <div class="stat-box">
-                <span>Lucro estimado</span>
-                <strong id="mlProfit">R$ 0,00</strong>
+            </article>
+
+            <article class="card result-card result-card--yellow">
+              <div class="card__header">
+                <div>
+                  <h3>Mercado Livre</h3>
+                  <p>Preço sugerido e lucro líquido</p>
+                </div>
               </div>
-            </div>
-            <div class="footer-stat">
-              <span>Margem real no anúncio</span>
-              <strong id="mlRealMargin">0%</strong>
-            </div>
-          </article>
+              <strong id="mlPrice">R$ 0,00</strong>
+              <div class="result-meta">
+                <span>Líquido: <b id="mlNet">R$ 0,00</b></span>
+                <span>Lucro: <b id="mlProfit">R$ 0,00</b></span>
+                <span>Margem real: <b id="mlRealMargin">0%</b></span>
+              </div>
+            </article>
+
+            <article class="card summary-card">
+              <h3>Resumo da simulação</h3>
+              <div class="summary-grid">
+                <div>
+                  <span>Custo total</span>
+                  <b id="totalCost">R$ 0,00</b>
+                </div>
+                <div>
+                  <span>Melhor plataforma</span>
+                  <b id="bestPlatform">-</b>
+                </div>
+                <div>
+                  <span>Lucro estimado</span>
+                  <b id="bestProfit">R$ 0,00</b>
+                </div>
+                <div>
+                  <span>Modo</span>
+                  <b id="priceModeText">Psicológico</b>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
+      </section>
 
-        <section class="panel history-panel">
-          <div class="panel-header history-head">
+      <section id="products" class="panel-group">
+        <article class="card products-card">
+          <div class="card__header">
             <div>
-              <h2>Histórico de simulações</h2>
-              <p>Salve os cálculos para comparar peças e preços.</p>
+              <h3>Cadastro de produtos</h3>
+              <p>Busque, visualize e exclua os itens salvos.</p>
             </div>
-            <button class="primary-btn" id="saveSimulationBtn" type="button">Salvar simulação</button>
+            <input type="text" id="searchProducts" class="search" placeholder="Buscar produto..." />
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Peça</th>
-                  <th>Custo total</th>
-                  <th>Shopee</th>
-                  <th>Mercado Livre</th>
-                  <th>Lucro Shopee</th>
-                  <th>Lucro ML</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="historyBody">
-                <tr class="empty-row">
-                  <td colspan="7">Nenhuma simulação salva ainda.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <div id="productsList" class="products-list"></div>
+        </article>
+      </section>
+
+      <section id="guide" class="panel-group">
+        <div class="guide-grid">
+          <article class="card">
+            <h3>Estratégia rápida</h3>
+            <ul class="guide-list">
+              <li>Use margem de 40% para peças de giro alto.</li>
+              <li>Use margem de 50% para acessórios e upgrades.</li>
+              <li>Faça anúncios separados para Shopee e Mercado Livre.</li>
+              <li>Embuta frete quando quiser destacar entrega grátis.</li>
+              <li>Crie kits para aumentar ticket médio e volume.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Como publicar</h3>
+            <ul class="guide-list">
+              <li>Suba este projeto no GitHub Pages.</li>
+              <li>Use a logo TaylorTech como identidade padrão.</li>
+              <li>Cadastre seus produtos no painel antes de anunciar.</li>
+              <li>Use preço psicológico para melhorar conversão.</li>
+              <li>Atualize taxas conforme cada plataforma mudar.</li>
+            </ul>
+          </article>
+        </div>
       </section>
     </main>
   </div>

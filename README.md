@@ -1,38 +1,38 @@
-# TaylorTech Web Systems - Calculadora Marketplace
+# TaylorTech Marketplace SaaS
 
-Projeto pronto para subir no GitHub Pages, Vercel ou abrir localmente.
+Sistema estático pronto para GitHub Pages ou Vercel.
 
-## O que faz
+## Recursos
 
-- Calcula preço ideal de venda para Shopee e Mercado Livre
-- Considera custo da peça
-- Considera custos extras
-- Permite embutir frete grátis
-- Calcula valor líquido e lucro estimado
-- Tem preço psicológico
-- Salva histórico de simulações no navegador
+- Dashboard estilo SaaS
+- Cálculo automático de preço para Shopee e Mercado Livre
+- Cadastro de produtos no navegador com localStorage
+- Gráfico de lucro recente
+- Busca de produtos
+- Exportação em JSON
+- Visual leve em preto, branco e verde
+- Logo TaylorTech Web Systems incluída em PNG
 
 ## Estrutura
 
 - `index.html`
 - `css/style.css`
 - `js/script.js`
-- `assets/logo-taylortech.svg`
+- `assets/logo-taylortech.png`
 
-## Como usar localmente
+## Como rodar
 
-Basta abrir o `index.html` no navegador.
+Basta abrir `index.html` no navegador.
 
 ## Como publicar no GitHub Pages
 
-1. Crie um repositório no GitHub
-2. Envie os arquivos do projeto
-3. Vá em **Settings > Pages**
-4. Em **Source**, selecione a branch principal e a pasta `/root`
-5. Salve
+```bash
+git init
+git add .
+git commit -m "feat: TaylorTech marketplace SaaS dashboard"
+git branch -M main
+git remote add origin https://github.com/TaylorTech2024/taylortech-marketplace.git
+git push -u origin main
+```
 
-## Personalização rápida
-
-- Logo: substitua `assets/logo-taylortech.svg`
-- Cores principais: edite as variáveis no topo de `css/style.css`
-- Fórmulas: ajuste em `js/script.js`
+Depois ative o GitHub Pages em `Settings > Pages > Deploy from branch > main`.
