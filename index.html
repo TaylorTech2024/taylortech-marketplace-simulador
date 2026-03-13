@@ -4,22 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaylorTech Marketplace SaaS</title>
-  <meta name="description" content="Dashboard SaaS da TaylorTech para simular preços de venda na Shopee e no Mercado Livre, cadastrar produtos, exportar PDF e consultar taxas automáticas do Mercado Livre." />
+  <meta name="description" content="Sistema da TaylorTech para simular preços de venda na Shopee e no Mercado Livre, importar JSON, exportar PDF e gerenciar produtos." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand-box">
-        <img src="assets/logo-taylortech.png" alt="TaylorTech Web Systems" class="brand-logo" />
-        <div>
-          <p class="eyebrow">Marketplace SaaS</p>
-          <strong>TaylorTech</strong>
+        <div class="brand-typed" aria-label="TaylorTech Web Systems">
+          <div class="brand-line"><span class="brand-white">Taylor</span><span class="brand-green">Tech</span></div>
+          <div class="brand-sub">web systems</div>
         </div>
       </div>
 
@@ -44,10 +42,12 @@
           <p class="eyebrow">Painel inteligente</p>
           <h1>Precificação automática para Shopee e Mercado Livre</h1>
           <p class="muted max-text">
-            Simule custos, aplique margem, gere PDFs e consulte automaticamente os custos de anúncio do Mercado Livre.
+            Simule custos, aplique margem, importe JSON, salve produtos e gere PDFs com a simulação atual ou com o cadastro salvo.
           </p>
         </div>
         <div class="topbar-actions">
+          <input type="file" id="importJsonInput" accept="application/json" hidden />
+          <button class="ghost-btn" id="btnImportJson">Inserir JSON</button>
           <button class="ghost-btn" id="btnExportProductsJson">Exportar JSON</button>
           <button class="primary-btn" id="btnExportPdf">Exportar PDF</button>
         </div>
@@ -169,7 +169,7 @@
                 <div><span class="muted">Margem real</span><strong id="mlMargin">0,00%</strong></div>
                 <div><span class="muted">Taxa usada</span><strong id="mlFeeShow">13%</strong></div>
               </div>
-              <div class="api-box" id="api" >
+              <div class="api-box" id="api">
                 <p class="muted">Consulta ML</p>
                 <small id="mlApiStatus">Pronto para consultar.</small>
                 <div id="mlApiListingTypes" class="api-list"></div>
@@ -179,17 +179,7 @@
         </article>
       </section>
 
-      <section class="two-col-section">
-        <article class="panel chart-panel">
-          <div class="panel-header">
-            <div>
-              <h2>Gráfico de lucro</h2>
-              <p class="muted">Últimos produtos salvos.</p>
-            </div>
-          </div>
-          <canvas id="profitChart"></canvas>
-        </article>
-
+      <section class="two-col-section compact-two-col">
         <article class="panel docs-panel" id="documentacao">
           <div class="panel-header">
             <div>
@@ -198,11 +188,27 @@
             </div>
           </div>
           <ul class="doc-list">
-            <li>O PDF exporta a simulação atual com data e resumo financeiro.</li>
+            <li>O PDF exporta a simulação atual e também a lista de produtos salvos, quando existir.</li>
             <li>O JSON exporta todos os produtos cadastrados no navegador.</li>
+            <li>O botão Inserir JSON importa produtos salvos para continuar editando e exportando.</li>
             <li>A API do Mercado Livre tenta consultar custos por preço e mostra os listing types retornados.</li>
             <li>Se a API não responder, o sistema usa a taxa manual definida por você.</li>
           </ul>
+        </article>
+
+        <article class="panel quick-summary-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Resumo rápido</h2>
+              <p class="muted">Visão geral do cenário atual.</p>
+            </div>
+          </div>
+          <div class="summary-grid">
+            <div class="summary-item"><span class="muted">Último produto</span><strong id="summaryProduct">-</strong></div>
+            <div class="summary-item"><span class="muted">Custo total</span><strong id="summaryCost">R$ 0,00</strong></div>
+            <div class="summary-item"><span class="muted">Melhor retorno</span><strong id="summaryBest">-</strong></div>
+            <div class="summary-item"><span class="muted">Modo PDF</span><strong>Atual + cadastro</strong></div>
+          </div>
         </article>
       </section>
 
@@ -210,7 +216,7 @@
         <div class="panel-header">
           <div>
             <h2>Cadastro de produtos</h2>
-            <p class="muted">Histórico local salvo no navegador.</p>
+            <p class="muted">Histórico local salvo no navegador ou importado via JSON.</p>
           </div>
           <div class="products-actions">
             <input type="text" id="searchProducts" placeholder="Buscar produto..." />
