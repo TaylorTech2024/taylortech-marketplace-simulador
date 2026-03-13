@@ -3,254 +3,221 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="TaylorTech Marketplace SaaS - simulador de preço para Shopee e Mercado Livre" />
   <title>TaylorTech Marketplace SaaS</title>
+  <meta name="description" content="Dashboard SaaS da TaylorTech para simular preços de venda na Shopee e no Mercado Livre, cadastrar produtos, exportar PDF e consultar taxas automáticas do Mercado Livre." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand">
-        <img src="assets/logo-taylortech.png" alt="TaylorTech Web Systems" class="brand__logo" />
+      <div class="brand-box">
+        <img src="assets/logo-taylortech.png" alt="TaylorTech Web Systems" class="brand-logo" />
         <div>
-          <p class="brand__tag">Marketplace SaaS</p>
-          <h1>TaylorTech</h1>
+          <p class="eyebrow">Marketplace SaaS</p>
+          <strong>TaylorTech</strong>
         </div>
       </div>
 
-      <nav class="nav">
-        <button class="nav__item nav__item--active" data-target="dashboard">Dashboard</button>
-        <button class="nav__item" data-target="calculator">Calculadora</button>
-        <button class="nav__item" data-target="products">Produtos</button>
-        <button class="nav__item" data-target="guide">Estratégia</button>
+      <nav class="nav-menu">
+        <a href="#dashboard" class="nav-link active">Dashboard</a>
+        <a href="#simulador" class="nav-link">Simulador</a>
+        <a href="#produtos" class="nav-link">Produtos</a>
+        <a href="#api" class="nav-link">API ML</a>
+        <a href="#documentacao" class="nav-link">Documentação</a>
       </nav>
 
-      <div class="sidebar__footer">
-        <p>Sistema leve para GitHub Pages</p>
-        <span>v1.0 TaylorTech Web Systems</span>
+      <div class="sidebar-card">
+        <p class="muted small">Resumo rápido</p>
+        <h3 id="sidebarBestPlatform">-</h3>
+        <p class="muted">Melhor plataforma no cenário atual.</p>
       </div>
     </aside>
 
-    <main class="content">
-      <header class="topbar">
+    <main class="main-content">
+      <header class="topbar" id="dashboard">
         <div>
           <p class="eyebrow">Painel inteligente</p>
-          <h2>Precificação para Shopee e Mercado Livre</h2>
-          <p class="topbar__subtitle">Cadastre peças, simule lucro e compare a melhor plataforma em segundos.</p>
+          <h1>Precificação automática para Shopee e Mercado Livre</h1>
+          <p class="muted max-text">
+            Simule custos, aplique margem, gere PDFs e consulte automaticamente os custos de anúncio do Mercado Livre.
+          </p>
         </div>
-        <div class="topbar__actions">
-          <button id="exportJsonBtn" class="btn btn--ghost">Exportar JSON</button>
-          <button id="clearHistoryBtn" class="btn btn--danger">Limpar histórico</button>
+        <div class="topbar-actions">
+          <button class="ghost-btn" id="btnExportProductsJson">Exportar JSON</button>
+          <button class="primary-btn" id="btnExportPdf">Exportar PDF</button>
         </div>
       </header>
 
-      <section id="dashboard" class="panel-group active">
-        <div class="stats-grid">
-          <article class="stat-card glow-green">
-            <span class="stat-card__label">Lucro estimado atual</span>
-            <strong id="statCurrentProfit">R$ 0,00</strong>
-            <small>com base na melhor plataforma</small>
-          </article>
-          <article class="stat-card">
-            <span class="stat-card__label">Produtos salvos</span>
-            <strong id="statProductsCount">0</strong>
-            <small>armazenados no navegador</small>
-          </article>
-          <article class="stat-card">
-            <span class="stat-card__label">Melhor plataforma</span>
-            <strong id="statBestPlatform">-</strong>
-            <small>comparação em tempo real</small>
-          </article>
-          <article class="stat-card glow-soft">
-            <span class="stat-card__label">Margem desejada</span>
-            <strong id="statMargin">40%</strong>
-            <small>ajuste na calculadora</small>
-          </article>
-        </div>
-
-        <div class="dashboard-grid">
-          <article class="card chart-card">
-            <div class="card__header">
-              <div>
-                <h3>Gráfico de lucro recente</h3>
-                <p>Últimos produtos comparados entre Shopee e Mercado Livre.</p>
-              </div>
-            </div>
-            <div class="chart-legend">
-              <span><i class="legend legend--green"></i> Shopee</span>
-              <span><i class="legend legend--yellow"></i> Mercado Livre</span>
-            </div>
-            <div id="barChart" class="bars"></div>
-          </article>
-
-          <article class="card products-preview">
-            <div class="card__header">
-              <div>
-                <h3>Últimos produtos</h3>
-                <p>Resumo rápido dos cadastros recentes.</p>
-              </div>
-            </div>
-            <div id="recentProducts" class="list"></div>
-          </article>
-        </div>
-      </section>
-
-      <section id="calculator" class="panel-group">
-        <div class="calculator-grid">
-          <article class="card form-card">
-            <div class="card__header">
-              <div>
-                <h3>Simulação de preço</h3>
-                <p>Preencha os custos e o sistema calcula o preço ideal.</p>
-              </div>
-            </div>
-
-            <form id="pricingForm" class="form-grid">
-              <label class="field field--full">
-                <span>Nome da peça</span>
-                <input type="text" id="productName" placeholder="Ex.: Corrente Bike 7v" />
-              </label>
-
-              <label class="field">
-                <span>Valor de compra</span>
-                <input type="number" step="0.01" min="0" id="cost" value="0" />
-              </label>
-
-              <label class="field">
-                <span>Custos extras</span>
-                <input type="number" step="0.01" min="0" id="extraCost" value="0" />
-              </label>
-
-              <label class="field">
-                <span>Frete embutido</span>
-                <input type="number" step="0.01" min="0" id="shippingCost" value="0" />
-              </label>
-
-              <label class="field">
-                <span>Margem desejada (%)</span>
-                <input type="number" step="1" min="0" id="desiredMargin" value="40" />
-              </label>
-
-              <label class="field">
-                <span>Taxa Shopee (%)</span>
-                <input type="number" step="1" min="0" id="shopeeFee" value="20" />
-              </label>
-
-              <label class="field">
-                <span>Taxa Mercado Livre (%)</span>
-                <input type="number" step="1" min="0" id="mlFee" value="13" />
-              </label>
-
-              <label class="field toggle-field">
-                <span>Preço psicológico</span>
-                <button type="button" id="psychologicalToggle" class="toggle toggle--on" aria-pressed="true">
-                  <span class="toggle__dot"></span>
-                </button>
-              </label>
-
-              <div class="actions field--full">
-                <button type="submit" class="btn btn--primary">Salvar produto</button>
-                <button type="button" id="simulateBtn" class="btn btn--ghost">Simular agora</button>
-                <button type="button" id="resetBtn" class="btn btn--ghost">Limpar</button>
-              </div>
-            </form>
-          </article>
-
-          <div class="results-grid">
-            <article class="card result-card result-card--green">
-              <div class="card__header">
-                <div>
-                  <h3>Shopee</h3>
-                  <p>Preço sugerido e lucro líquido</p>
-                </div>
-              </div>
-              <strong id="shopeePrice">R$ 0,00</strong>
-              <div class="result-meta">
-                <span>Líquido: <b id="shopeeNet">R$ 0,00</b></span>
-                <span>Lucro: <b id="shopeeProfit">R$ 0,00</b></span>
-                <span>Margem real: <b id="shopeeRealMargin">0%</b></span>
-              </div>
-            </article>
-
-            <article class="card result-card result-card--yellow">
-              <div class="card__header">
-                <div>
-                  <h3>Mercado Livre</h3>
-                  <p>Preço sugerido e lucro líquido</p>
-                </div>
-              </div>
-              <strong id="mlPrice">R$ 0,00</strong>
-              <div class="result-meta">
-                <span>Líquido: <b id="mlNet">R$ 0,00</b></span>
-                <span>Lucro: <b id="mlProfit">R$ 0,00</b></span>
-                <span>Margem real: <b id="mlRealMargin">0%</b></span>
-              </div>
-            </article>
-
-            <article class="card summary-card">
-              <h3>Resumo da simulação</h3>
-              <div class="summary-grid">
-                <div>
-                  <span>Custo total</span>
-                  <b id="totalCost">R$ 0,00</b>
-                </div>
-                <div>
-                  <span>Melhor plataforma</span>
-                  <b id="bestPlatform">-</b>
-                </div>
-                <div>
-                  <span>Lucro estimado</span>
-                  <b id="bestProfit">R$ 0,00</b>
-                </div>
-                <div>
-                  <span>Modo</span>
-                  <b id="priceModeText">Psicológico</b>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="products" class="panel-group">
-        <article class="card products-card">
-          <div class="card__header">
-            <div>
-              <h3>Cadastro de produtos</h3>
-              <p>Busque, visualize e exclua os itens salvos.</p>
-            </div>
-            <input type="text" id="searchProducts" class="search" placeholder="Buscar produto..." />
-          </div>
-          <div id="productsList" class="products-list"></div>
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span class="muted">Produtos salvos</span>
+          <strong id="statProducts">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted">Simulações</span>
+          <strong id="statSimulations">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted">Melhor plataforma</span>
+          <strong id="statBestPlatform">-</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted">Preço ML via API</span>
+          <strong id="statApiMode">Manual</strong>
         </article>
       </section>
 
-      <section id="guide" class="panel-group">
-        <div class="guide-grid">
-          <article class="card">
-            <h3>Estratégia rápida</h3>
-            <ul class="guide-list">
-              <li>Use margem de 40% para peças de giro alto.</li>
-              <li>Use margem de 50% para acessórios e upgrades.</li>
-              <li>Faça anúncios separados para Shopee e Mercado Livre.</li>
-              <li>Embuta frete quando quiser destacar entrega grátis.</li>
-              <li>Crie kits para aumentar ticket médio e volume.</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Como publicar</h3>
-            <ul class="guide-list">
-              <li>Suba este projeto no GitHub Pages.</li>
-              <li>Use a logo TaylorTech como identidade padrão.</li>
-              <li>Cadastre seus produtos no painel antes de anunciar.</li>
-              <li>Use preço psicológico para melhorar conversão.</li>
-              <li>Atualize taxas conforme cada plataforma mudar.</li>
-            </ul>
-          </article>
+      <section class="content-grid" id="simulador">
+        <article class="panel form-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Simulador de preço</h2>
+              <p class="muted">Preencha os custos da peça e veja o preço ideal de venda.</p>
+            </div>
+            <span class="pill">Fórmula: custo ÷ (1 - taxa - margem)</span>
+          </div>
+
+          <div class="form-grid">
+            <label class="field field-full">
+              <span>Nome do produto</span>
+              <input type="text" id="productName" placeholder="Ex.: Pneu 29 MTB" />
+            </label>
+
+            <label class="field">
+              <span>Valor de compra</span>
+              <input type="number" id="cost" step="0.01" min="0" placeholder="0,00" />
+            </label>
+
+            <label class="field">
+              <span>Custos extras</span>
+              <input type="number" id="extraCost" step="0.01" min="0" placeholder="0,00" />
+            </label>
+
+            <label class="field">
+              <span>Margem desejada (%)</span>
+              <input type="number" id="desiredMargin" step="0.01" min="0" value="40" />
+            </label>
+
+            <label class="field">
+              <span>Taxa Shopee (%)</span>
+              <input type="number" id="shopeeFee" step="0.01" min="0" value="20" />
+            </label>
+
+            <label class="field">
+              <span>Taxa ML manual (%)</span>
+              <input type="number" id="mlFee" step="0.01" min="0" value="13" />
+            </label>
+
+            <label class="field">
+              <span>Frete embutido</span>
+              <input type="number" id="shippingCost" step="0.01" min="0" value="0" />
+            </label>
+
+            <div class="field switches">
+              <span>Configurações</span>
+              <label class="toggle-row"><input type="checkbox" id="includeShipping" checked /> Embutir frete no preço</label>
+              <label class="toggle-row"><input type="checkbox" id="psychologicalPrice" checked /> Usar preço psicológico</label>
+              <label class="toggle-row"><input type="checkbox" id="useMlApi" checked /> Consultar Mercado Livre automaticamente</label>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <button class="primary-btn" id="btnCalculate">Calcular</button>
+            <button class="secondary-btn" id="btnSaveProduct">Salvar produto</button>
+            <button class="ghost-btn" id="btnClear">Limpar</button>
+          </div>
+        </article>
+
+        <article class="panel result-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Resultado</h2>
+              <p class="muted">Comparação entre as plataformas.</p>
+            </div>
+            <span class="pill success" id="bestPlatformBadge">-</span>
+          </div>
+
+          <div class="results-grid">
+            <section class="platform-card shopee-card">
+              <div class="platform-top">
+                <h3>Shopee</h3>
+                <span class="tag">Manual</span>
+              </div>
+              <p class="price" id="shopeePrice">R$ 0,00</p>
+              <div class="mini-grid">
+                <div><span class="muted">Líquido</span><strong id="shopeeNet">R$ 0,00</strong></div>
+                <div><span class="muted">Lucro</span><strong id="shopeeProfit">R$ 0,00</strong></div>
+                <div><span class="muted">Margem real</span><strong id="shopeeMargin">0,00%</strong></div>
+                <div><span class="muted">Taxa</span><strong id="shopeeFeeShow">20%</strong></div>
+              </div>
+            </section>
+
+            <section class="platform-card ml-card">
+              <div class="platform-top">
+                <h3>Mercado Livre</h3>
+                <span class="tag api" id="mlModeTag">API</span>
+              </div>
+              <p class="price" id="mlPrice">R$ 0,00</p>
+              <div class="mini-grid">
+                <div><span class="muted">Líquido</span><strong id="mlNet">R$ 0,00</strong></div>
+                <div><span class="muted">Lucro</span><strong id="mlProfit">R$ 0,00</strong></div>
+                <div><span class="muted">Margem real</span><strong id="mlMargin">0,00%</strong></div>
+                <div><span class="muted">Taxa usada</span><strong id="mlFeeShow">13%</strong></div>
+              </div>
+              <div class="api-box" id="api" >
+                <p class="muted">Consulta ML</p>
+                <small id="mlApiStatus">Pronto para consultar.</small>
+                <div id="mlApiListingTypes" class="api-list"></div>
+              </div>
+            </section>
+          </div>
+        </article>
+      </section>
+
+      <section class="two-col-section">
+        <article class="panel chart-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Gráfico de lucro</h2>
+              <p class="muted">Últimos produtos salvos.</p>
+            </div>
+          </div>
+          <canvas id="profitChart"></canvas>
+        </article>
+
+        <article class="panel docs-panel" id="documentacao">
+          <div class="panel-header">
+            <div>
+              <h2>Documentação rápida</h2>
+              <p class="muted">Como o sistema trabalha.</p>
+            </div>
+          </div>
+          <ul class="doc-list">
+            <li>O PDF exporta a simulação atual com data e resumo financeiro.</li>
+            <li>O JSON exporta todos os produtos cadastrados no navegador.</li>
+            <li>A API do Mercado Livre tenta consultar custos por preço e mostra os listing types retornados.</li>
+            <li>Se a API não responder, o sistema usa a taxa manual definida por você.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="panel products-panel" id="produtos">
+        <div class="panel-header">
+          <div>
+            <h2>Cadastro de produtos</h2>
+            <p class="muted">Histórico local salvo no navegador.</p>
+          </div>
+          <div class="products-actions">
+            <input type="text" id="searchProducts" placeholder="Buscar produto..." />
+            <button class="ghost-btn" id="btnClearProducts">Limpar tudo</button>
+          </div>
         </div>
+        <div id="productsList" class="products-list"></div>
       </section>
     </main>
   </div>

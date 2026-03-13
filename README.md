@@ -1,38 +1,33 @@
 # TaylorTech Marketplace SaaS
 
-Sistema estático pronto para GitHub Pages ou Vercel.
+Dashboard estático pronto para GitHub Pages ou Vercel.
 
 ## Recursos
-
-- Dashboard estilo SaaS
-- Cálculo automático de preço para Shopee e Mercado Livre
-- Cadastro de produtos no navegador com localStorage
-- Gráfico de lucro recente
-- Busca de produtos
-- Exportação em JSON
-- Visual leve em preto, branco e verde
-- Logo TaylorTech Web Systems incluída em PNG
+- Simulador de preço para Shopee e Mercado Livre
+- Cálculo de líquido, lucro e margem real
+- Consulta automática de custos do Mercado Livre via endpoint oficial de listing prices
+- Fallback para taxa manual caso a API não responda
+- Exportação da simulação atual em PDF
+- Exportação dos produtos salvos em JSON
+- Cadastro de produtos com persistência em localStorage
+- Gráfico de lucro com Chart.js
+- Interface leve em HTML, CSS e JavaScript puro
 
 ## Estrutura
-
 - `index.html`
 - `css/style.css`
 - `js/script.js`
 - `assets/logo-taylortech.png`
 
-## Como rodar
+## Como publicar
+1. Extraia os arquivos.
+2. Suba tudo para um repositório.
+3. Ative o GitHub Pages na branch `main`.
 
-Basta abrir `index.html` no navegador.
-
-## Como publicar no GitHub Pages
-
+## Commit sugerido
 ```bash
-git init
-git add .
-git commit -m "feat: TaylorTech marketplace SaaS dashboard"
-git branch -M main
-git remote add origin https://github.com/TaylorTech2024/taylortech-marketplace.git
-git push -u origin main
+git commit -m "feat: add PDF export and Mercado Livre auto pricing API"
 ```
 
-Depois ative o GitHub Pages em `Settings > Pages > Deploy from branch > main`.
+## Observação sobre a API do Mercado Livre
+O projeto tenta consultar o endpoint público de listing prices para `MLB`. Se a API falhar por CORS, indisponibilidade ou mudança externa, o sistema usa a taxa manual configurada na interface.
